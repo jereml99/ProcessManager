@@ -23,6 +23,8 @@ namespace ProcessManager
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainModelView();
         }
     }
 }
