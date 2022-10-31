@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ProcessManager;
 
-public class MainModelView : INotifyPropertyChanged
+public class MainModelView
 {
     private ObservableCollection<Process> _processes;
     public ObservableCollection<Process> processes
@@ -13,7 +13,6 @@ public class MainModelView : INotifyPropertyChanged
         set
         {
             _processes = value;
-            OnPropertyChanged("Processes");
         }
     }
 
@@ -21,10 +20,5 @@ public class MainModelView : INotifyPropertyChanged
     {
         processes = new ObservableCollection<Process>(Process.GetProcesses());
     }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string name)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+    
 }
