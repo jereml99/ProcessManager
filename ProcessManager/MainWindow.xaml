@@ -11,7 +11,11 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding processes }">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="1000" ItemsSource="{Binding processes }">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -21,5 +25,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding RefreshCommand}">Refresh</Button>
     </Grid>
 </Window>
