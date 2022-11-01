@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Windows.Threading;
 
 namespace ProcessManager;
 
-public class MainModelView
+public class MainModelView : INotifyPropertyChanged
 {
     private ObservableCollection<Process> _processes;
     private DispatcherTimer _timer;
@@ -19,6 +18,7 @@ public class MainModelView
         set
         {
             _processes = value;
+            OnPropertyChanged("processes");
         }
     }
     
@@ -55,11 +55,14 @@ public class MainModelView
             processes.Add(process);
         }
     }
+
+    private bool CanPauseAutomaticRefresh(object obj) => _timer.IsEnabled;
     
     private void PauseAutomaticRefresh(object obj)
     {
         _timer.Stop();
     }
+    
     
     private void StartAutomaticRefresh(object obj)
     {
@@ -77,6 +80,7 @@ public class MainModelView
             processes.Add(process);
         }
     }
+    
 
     public ICommand RefreshCommand { get; set; }
     public ICommand StartAutomaticRefreshCommand { get; set; }
@@ -86,7 +90,12 @@ public class MainModelView
     public ICommand FilterCommand { get; set; }
     public ICommand KillCommand { get; set; }
     
-    private bool CanPauseAutomaticRefresh(object obj) => _timer.IsEnabled;
 
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged(string name)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    
 
 }
