@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:ProcessManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary Source="Resources.xaml"></ResourceDictionary>
     </Application.Resources>
 </Application>

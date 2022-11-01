@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -32,9 +33,28 @@ public class MainModelView : INotifyPropertyChanged
         PauseAutomaticRefreshCommand = new RelayCommand(PauseAutomaticRefresh, CanPauseAutomaticRefresh);
         FilterCommand = new RelayCommand(Filter);
         KillCommand = new RelayCommand(Kill, CanKill);
+        SortCommand = new RelayCommand(Sort, CanSort);
+        ChangePriorityCommand = new RelayCommand(ChangePriority, CanChangePriority);
         
         _timer = new DispatcherTimer();
         _timer.Tick += ((sender, args) => Refresh(null));
+    }
+
+
+    private bool CanChangePriority(object obj) => SelectedProcess != null;
+    private void ChangePriority(object obj)
+    {
+        if (obj is ProcessPriorityClass priority)
+        {
+            SelectedProcess.PriorityClass = priority;
+        }
+    }
+    
+    private bool CanSort(object obj) => processes.Count > 0;
+
+    private void Sort(object obj)
+    {
+        processes = new ObservableCollection<Process>(processes.OrderBy(p => p.ProcessName).ThenBy(p => p.Id));
     }
 
     private bool CanKill(object obj) => SelectedProcess != null;
@@ -73,12 +93,8 @@ public class MainModelView : INotifyPropertyChanged
     
     private void Filter(object obj)
     {
-        processes.Clear();
-        foreach (var process in Process.GetProcesses()
-                     .Where(p => p.ProcessName.IndexOf(obj.ToString(), StringComparison.OrdinalIgnoreCase) != -1))
-        {
-            processes.Add(process);
-        }
+        processes = new ObservableCollection<Process>(Process.GetProcesses()
+            .Where(p => p.ProcessName.IndexOf(obj.ToString(), StringComparison.OrdinalIgnoreCase) != -1));
     }
     
 
@@ -89,7 +105,10 @@ public class MainModelView : INotifyPropertyChanged
     
     public ICommand FilterCommand { get; set; }
     public ICommand KillCommand { get; set; }
+    public ICommand SortCommand { get; set; }
     
+    public ICommand ChangePriorityCommand { get; set; }
+
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged(string name)

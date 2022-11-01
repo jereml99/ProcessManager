@@ -52,15 +52,34 @@
                             CommandParameter="{Binding ElementName=Filter,Path=Text}"></KeyBinding>
             </TextBox.InputBindings>
         </TextBox>
-        <StackPanel Grid.Column="1" Grid.ColumnSpan="1000" Grid.Row="1">
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="1000" Grid.Row="1" Grid.RowSpan="1000">
             <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItem.ProcessName}" />
             <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItem.Id}" />
             <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItem.StartTime}" />
             <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItem.TotalProcessorTime}" />
-            <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItems.WorkingSet64}" />
+            <!-- <ListView ItemsSource="{Binding ElementName=Processes,Path= SelectedItem.Modules}"> -->
+            <!--     <ListView.ItemTemplate> -->
+            <!--         <DataTemplate> -->
+            <!--             <TextBlock Text="{Binding ModuleName}"/> -->
+            <!--         </DataTemplate> -->
+            <!--     </ListView.ItemTemplate> -->
+            <!-- </ListView> -->
         </StackPanel>
         
-        <Button Grid.Column="3" Grid.Row="1" Command="{Binding KillCommand}">Kill</Button>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding KillCommand}">Kill</Button>
+        <Button Grid.Column="2" Grid.Row="3" Command="{Binding FilterCommand}" 
+                CommandParameter="{Binding ElementName=Filter,Path=Text}">
+            Filter
+        </Button>
+        <Button Grid.Column="3" Grid.Row="3" Command="{Binding SortCommand}">Sort</Button>
+        
+        <StackPanel Grid.Column="4" Grid.Row="2" Width="300" Margin="10" Grid.RowSpan="100">
+            <TextBlock>Choose Priority Class</TextBlock>
+
+            <ListBox Name="myComboBox" SelectedItem="{Binding ElementName=Processes,Path=SelectedItem.PriorityClass}"
+                     ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+            <Button Command="{Binding ChangePriorityCommand}" CommandParameter="{Binding ElementName=myComboBox, Path=SelectedItem}">Change</Button>
+        </StackPanel>
         
     </Grid>
 </Window>
