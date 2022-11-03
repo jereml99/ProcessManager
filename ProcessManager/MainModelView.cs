@@ -18,7 +18,7 @@ public class MainModelView : INotifyPropertyChanged
         get { return _processes; }
         set
         {
-            _processes = value;
+            _processes = new ObservableCollection<Process>(value.Where(p => !IsSystemProcess(p)));
             OnPropertyChanged("processes");
         }
     }
@@ -69,11 +69,7 @@ public class MainModelView : INotifyPropertyChanged
 
     private void Refresh(object obj)
     {
-        processes.Clear();
-        foreach (var process in Process.GetProcesses())
-        {
-            processes.Add(process);
-        }
+        processes = new ObservableCollection<Process>(Process.GetProcesses());
     }
 
     private bool CanPauseAutomaticRefresh(object obj) => _timer.IsEnabled;
@@ -96,6 +92,19 @@ public class MainModelView : INotifyPropertyChanged
         processes = new ObservableCollection<Process>(Process.GetProcesses()
             .Where(p => p.ProcessName.IndexOf(obj.ToString(), StringComparison.OrdinalIgnoreCase) != -1));
     }
+
+    private bool IsSystemProcess(Process p)
+    {
+        try
+        {
+            p.PriorityClass = p.PriorityClass;
+            return false;
+        }
+        catch (Exception e)
+        {
+            return true;
+        }
+    }
     
 
     public ICommand RefreshCommand { get; set; }
@@ -108,8 +117,7 @@ public class MainModelView : INotifyPropertyChanged
     public ICommand SortCommand { get; set; }
     
     public ICommand ChangePriorityCommand { get; set; }
-
-
+    
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged(string name)
     {
