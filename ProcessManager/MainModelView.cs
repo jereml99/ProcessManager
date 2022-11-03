@@ -29,7 +29,7 @@ public class MainModelView : INotifyPropertyChanged
     {
         processes = new ObservableCollection<Process>(Process.GetProcesses());
         RefreshCommand = new RelayCommand(Refresh);
-        StartAutomaticRefreshCommand = new RelayCommand(StartAutomaticRefresh);
+        StartAutomaticRefreshCommand = new RelayCommand(StartAutomaticRefresh, CanStartAutomaticRefresh);
         PauseAutomaticRefreshCommand = new RelayCommand(PauseAutomaticRefresh, CanPauseAutomaticRefresh);
         FilterCommand = new RelayCommand(Filter);
         KillCommand = new RelayCommand(Kill, CanKill);
@@ -39,6 +39,8 @@ public class MainModelView : INotifyPropertyChanged
         _timer = new DispatcherTimer();
         _timer.Tick += ((sender, args) => Refresh(null));
     }
+
+    private bool CanStartAutomaticRefresh(object s) => !string.IsNullOrEmpty(s as string) && !_timer.IsEnabled;
 
 
     private bool CanChangePriority(object obj) => SelectedProcess != null;

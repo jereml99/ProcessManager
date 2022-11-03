@@ -47,15 +47,21 @@
                             CommandParameter="{Binding ElementName=Tick,Path=Text}"></KeyBinding>
             </TextBox.InputBindings>
         </TextBox>
-        <Button Grid.Row="0" Grid.Column="3" Command="{Binding PauseAutomaticRefreshCommand}">Pause</Button>
-        <TextBox x:Name="Filter" Grid.Column="4" Grid.Row="3">
-            <TextBox.InputBindings>
-                <KeyBinding Key="Return"
-                            Command="{Binding FilterCommand}"
-                            CommandParameter="{Binding ElementName=Filter,Path=Text}"></KeyBinding>
-            </TextBox.InputBindings>
-        </TextBox>
-        <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3">
+        <Button Grid.Row="0" Grid.Column="3" Command="{Binding StartAutomaticRefreshCommand}" 
+                CommandParameter="{Binding ElementName=Tick,Path=Text}" >Start</Button>
+        <Button Grid.Row="0" Grid.Column="4" Command="{Binding PauseAutomaticRefreshCommand}">Pause</Button>
+        <StackPanel Grid.Column="4" Grid.Row="3">
+            <Label>Filter</Label>
+            <TextBox x:Name="Filter" >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return"
+                                Command="{Binding FilterCommand}"
+                                CommandParameter="{Binding ElementName=Filter,Path=Text}"></KeyBinding>
+                </TextBox.InputBindings>
+            </TextBox>
+        </StackPanel>
+       
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3" CanVerticallyScroll="True">
             <Label FontWeight="Bold">ProcessName</Label>
             <TextBlock Text="{Binding ElementName=Processes,Path=SelectedItem.ProcessName}" />
             <Label FontWeight="Bold">Id</Label>
