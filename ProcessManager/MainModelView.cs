@@ -43,7 +43,7 @@ public class MainModelView : INotifyPropertyChanged
     private bool CanStartAutomaticRefresh(object s) => !string.IsNullOrEmpty(s as string) && !_timer.IsEnabled;
 
 
-    private bool CanChangePriority(object obj) => SelectedProcess != null;
+    private bool CanChangePriority(object obj) => SelectedProcess != null && SelectedProcess.PriorityClass != (ProcessPriorityClass)obj;
     private void ChangePriority(object obj)
     {
         if (obj is ProcessPriorityClass priority)
